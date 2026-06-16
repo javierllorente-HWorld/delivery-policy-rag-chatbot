@@ -33,7 +33,12 @@ while True:
     docs = results["documents"][0]
     metas = results["metadatas"][0]
 
-    print("\nRespuesta basada en políticas:")
-    for doc, meta in zip(docs, metas):
-        print("-", doc)
-        print("  Fuente:", meta["source"])
+    sources = sorted(set(meta["source"] for meta in metas))
+    answer = " ".join(docs)
+
+    print("\nRespuesta:")
+    print(answer)
+
+    print("\nFuentes:")
+    for source in sources:
+        print("-", source)

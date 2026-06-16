@@ -1,70 +1,67 @@
 # Delivery Policy RAG Chatbot
 
-Chatbot RAG para consultar políticas de delivery usando Python, Sentence Transformers y ChromaDB.
+Chatbot simple para responder preguntas sobre políticas de delivery usando documentos internos.
 
-## Stack
+## Qué hace
 
-- Python 3.12
-- Sentence Transformers
-- all-MiniLM-L6-v2
-- ChromaDB
-- Chroma Cloud
-- ONNX Runtime
+El proyecto permite consultar políticas cargadas en archivos `.txt`.
 
-## Estado actual
+El chatbot:
 
-El proyecto ya funciona con:
+* Lee documentos desde la carpeta `documents`
+* Divide el contenido en partes pequeñas
+* Crea embeddings con `all-MiniLM-L6-v2`
+* Guarda la información en Chroma
+* Busca la política más relacionada con la pregunta
+* Responde mostrando también la fuente del documento
 
-- Lectura de archivos `.txt` desde `documents/`
-- Creación de chunks simples
-- Generación de embeddings con `all-MiniLM-L6-v2`
-- Guardado en Chroma Cloud
-- Búsqueda semántica desde consola
-- Respuesta con fuente del documento
+## Stack usado
 
-## Problemas encontrados
+* Python 3.12
+* Sentence Transformers
+* all-MiniLM-L6-v2
+* ChromaDB
+* Chroma Cloud
+* ONNX Runtime
 
-ChromaDB local en Windows fallaba al ejecutar:
+## Cómo usar
 
-```python
-collection.add(...)
-El proceso se cerraba sin traceback y devolvía:
-
--1073741819
-
-Esto indica un crash nativo de Windows.
-
-Se probaron distintas versiones de ChromaDB. Las versiones 1.x instalaban pero crasheaban en add(). Las versiones 0.x pedían compilar chroma-hnswlib, lo cual requería Microsoft Visual C++ Build Tools.
-
-Solución actual
-
-Se usa Chroma Cloud para mantener ChromaDB como vector database sin cambiar el stack principal.
-
-Nota sobre API key
-
-En este proyecto de práctica la API key puede estar visible en el código porque no contiene información importante ni se usa para producción.
-
-Uso
-
-Cargar documentos:
-
-py -3.12 src/ingest.py
-
-Ejecutar chatbot:
-
-py -3.12 src/main.py
-Documentos
-
-Los archivos deben estar en:
-
-documents/
-
-## Commit
-
-Ejecutá:
+Primero cargar los documentos:
 
 ```powershell
-git status
-git add .
-git commit -m "Add working Chroma Cloud RAG prototype"
-git push
+py -3.12 src/ingest.py
+```
+
+Después ejecutar el chatbot:
+
+```powershell
+py -3.12 src/main.py
+```
+
+Para salir:
+
+```text
+salir
+```
+
+## Ejemplo
+
+Pregunta:
+
+```text
+¿Puedo pedir reembolso?
+```
+
+Respuesta:
+
+```text
+Las solicitudes de reembolso son revisadas por el equipo de soporte.
+Los clientes pueden solicitar un reembolso dentro de las 48 horas posteriores a la entrega.
+
+Fuentes:
+- refund_policy.txt
+```
+
+## Estado del proyecto
+
+El proyecto está funcionando como prototipo básico de RAG para consultar documentos internos simulados.

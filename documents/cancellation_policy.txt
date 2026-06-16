@@ -1,0 +1,3 @@
+Los pedidos pueden cancelarse antes de ser asignados a un repartidor.
+
+Una vez asignados, la cancelación puede generar un cargo.

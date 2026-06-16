@@ -1,17 +1,17 @@
-from langchain_community.document_loaders import TextLoader
+from sentence_transformers import SentenceTransformer
 
-documents = []
+documents = [
+    "Los clientes pueden solicitar un reembolso dentro de las 48 horas posteriores a la entrega.",
+    "Los pedidos pueden cancelarse antes de ser asignados a un repartidor.",
+    "Los repartidores deben completar las entregas a tiempo."
+]
 
-for file_name in [
-    "documents/refund_policy.txt",
-    "documents/cancellation_policy.txt",
-    "documents/driver_rules.txt",
-]:
-    loader = TextLoader(file_name, encoding="utf-8")
-    documents.extend(loader.load())
+model = SentenceTransformer("all-MiniLM-L6-v2")
 
-print("Documentos cargados:", len(documents))
+embeddings = model.encode(documents)
 
-for doc in documents:
-    print("\n------------------")
-    print(doc.page_content)
+print("Cantidad de embeddings:", len(embeddings))
+print("Dimensión del vector:", len(embeddings[0]))
+
+print("\nPrimer embedding:")
+print(embeddings[0])

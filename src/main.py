@@ -1,18 +1,8 @@
-import chromadb
 from sentence_transformers import SentenceTransformer
-
-client = chromadb.CloudClient(
-    api_key="ck-6HbuPgtt1zi3ersMP5DuA3oY659ZdAKZiCSW79dWyELT",
-    tenant="639f121d-09f8-4150-bfe5-7348282691e9",
-    database="delivery_policy_rag"
-)
-
-collection = client.get_collection(
-    name="delivery_policies_v2",
-    embedding_function=None
-)
+from chroma_client import get_collection
 
 model = SentenceTransformer("all-MiniLM-L6-v2")
+collection = get_collection()
 
 print("Chatbot de políticas de delivery")
 print("Escribí 'salir' para terminar")

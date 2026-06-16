@@ -1,4 +1,6 @@
 from pathlib import Path
+from sentence_transformers import SentenceTransformer
+from chroma_client import get_collection
 
 DOCUMENTS_DIR = Path("documents")
 
@@ -22,19 +24,8 @@ for chunk in chunks:
     print("\nID:", chunk["id"])
     print("Source:", chunk["source"])
     print("Text:", chunk["text"])
-    import chromadb
-from sentence_transformers import SentenceTransformer
 
-client = chromadb.CloudClient(
-    api_key="ck-6HbuPgtt1zi3ersMP5DuA3oY659ZdAKZiCSW79dWyELT",
-    tenant="639f121d-09f8-4150-bfe5-7348282691e9",
-    database="delivery_policy_rag"
-)
-
-collection = client.get_or_create_collection(
-    name="delivery_policies_v2",
-    embedding_function=None
-)
+collection = get_collection()
 
 model = SentenceTransformer("all-MiniLM-L6-v2")
 
@@ -43,7 +34,7 @@ documents = [chunk["text"] for chunk in chunks]
 metadatas = [{"source": chunk["source"]} for chunk in chunks]
 embeddings = model.encode(documents).tolist()
 
-collection.add(
+collection.upsert(
     ids=ids,
     documents=documents,
     metadatas=metadatas,
